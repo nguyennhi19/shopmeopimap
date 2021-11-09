@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List of product</title>
+    <link href="/assets/bootstrap-4.6.0-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap-stylesheet">
+    <link rel="stylesheet" href="/assets/font-awesome-4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="/assets/js/jquery-3.6.0.js"></script>
+    <script src="/assets/bootstrap-4.6.0-dist/js/bootstrap.bundle.js"></script>
+    <script src="/assets/js/sweetalert2.js"></script>
+</head>
+<body>
+<div class="" style="padding: 25px;">
+
+    <header>
+        <form>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label for="Name">Name</label>
+                    <input type="text" class="form-control" id="name">
+                </div>
+                <div class="col-3">
+                    <label for="image">image</label>
+                    <input type="text" class="form-control" id="image">
+                </div>
+                <div class="col-3">
+                    <label for="price">price</label>
+                    <input type="number" class="form-control" id="price">
+                </div>
+                <div class="col-3">
+                    <label for="accede">accede</label>
+                    <input type="number" class="form-control" id="accede">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label for="quantity">quantity</label>
+                    <input type="number" class="form-control" id="quantity">
+                </div>
+                <div class="col-3">
+                    <label for="description">description</label>
+                    <input type="text" class="form-control" id="description">
+                </div>
+                <div class="col-3">
+                    <label for="category">category</label>
+                    <select id="category" class="select form-control">
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label for="company">company</label>
+                    <select id="company" class="select form-control">
+                    </select>
+                </div>
+            </div>
+            <button type="button" id="btnCreate" class="btn btn-primary">Create product</button>
+        </form>
+    </header>
+    <div class="modal-content" style="border: 0; margin-top: 25px;">
+        <table class="table table-hover">
+            <thead style="background-color: #2a9d05; color: #fff;">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">image</th>
+                <th scope="col">price</th>
+                <th scope="col">accede</th>
+                <th scope="col">quantity</th>
+                <th scope="col">description</th>
+                <th scope="col">createdAt</th>
+                <th scope="col">category</th>
+                <th scope="col">company</th>
+                <th colspan="2" scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody id="tbListProduct">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal update product information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label for="idUp">ID</label>
+                            <input type="text" class="form-control" id="idUp" readonly>
+                        </div>
+                        <div class="col-2">
+                            <label for="nameUp">Name</label>
+                            <input type="text" class="form-control" id="nameUp">
+                        </div>
+                        <div class="col-2">
+                            <img id ="img-imageE" style="width: 108px" class="rounded img-lg mb-2" src="https://cdn.fakercloud.com/avatars/alan_zhang__128.jpg" alt="">
+                            <input type="url" name="image" id="imageUp" class="form-control">
+                        </div>
+                        <div class="col-2">
+                            <label for="priceUp">price</label>
+                            <input type="number" class="form-control" id="priceUp">
+                        </div>
+                        <div class="col-2">
+                            <label for="accedeUp">accede</label>
+                            <input type="number" class="form-control" id="accedeUp">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label for="createAtUp">createAt</label>
+                            <input type="date" class="form-control" id="createAtUp">
+                        </div>
+                        <div class="col-2">
+                            <label for="quantityUp">quantity</label>
+                            <input type="number" class="form-control" id="quantityUp">
+                        </div>
+                        <div class="col-2">
+                            <label for="descriptionUp">description</label>
+                            <input type="text" class="form-control" id="descriptionUp">
+                        </div>
+                        <div class="col-2">
+                            <label for="companyUp">company</label>
+                            <select id="companyUp" class="select form-control">
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <label for="categoryUp">category</label>
+                            <select id="categoryUp" class="select form-control">
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="btnUpdate" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/page/js/app.js"></script>
+<script>
+
+    let api_category = "https://618015b98bfae60017adf995.mockapi.io/category";
+    let api_company = "https://618015b98bfae60017adf995.mockapi.io/company";
+
+    let product = new Product();
+    let company = new Company();
+    let category = new Category();
+
+    $("#btnCreate").on("click", function () {
+        createProduct();
+    })
+
+
+    $("#btnUpdate").on("click", function () {
+        updateProduct();
+    })
+
+    function handleDelete() {
+        $("table tbody tr").on("click", ".delete", function () {
+            let id = $(this).data("id");
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        headers: {
+                            'Accept':'application/json',
+                            'Content-Type':'application/json'
+                        },
+                        url: "/api/products/delete/" + id,
+                        type: "GET"
+                    }).done(function (resp) {
+
+                        console.log(resp)
+
+                        if (resp === true) {
+
+                            $("#tr_" + id).remove();
+
+                            Swal.fire(
+                                'Deleted!',
+                                'This product has been deleted.',
+                                'success'
+                            )
+                        } else {
+                            alert("UnSuccess deleted")
+                        }
+
+                    }).fail(function () {
+                        alert("UnSuccess deleted 2")
+                    });
+
+                }
+            })
+
+        });
+    }
+
+    function handleEdit() {
+        $("table tbody tr").on("click", ".edit", function () {
+            let id = $(this).data("id");
+
+            console.log("id = " + id)
+
+
+            $.ajax({
+                headers: {
+                    'Accept':'application/json',
+                    'Content-Type':'application/json'
+                },
+                url: "/api/products/" + id,
+                type: "GET"
+            }).done(function (resp) {
+                $("#idUp").val(resp.id);
+                $("#nameUp").val(resp.name);
+                $("#imageUp").val(resp.image);
+                $("#priceUp").val(resp.price);
+                $("#accedeUp").val(resp.accede);
+                $("#quantityUp").val(resp.quantity);
+                $("#descriptionUp").val(resp.description);
+                $("#createAtUp").val(resp.createdAt);
+                $("#categoryUp").val(resp.category.id);
+                $("#companyUp").val(resp.company.id);
+
+            }).fail(function () {
+                alert("ERROR")
+            });
+        })
+    }
+    function createProduct() {
+
+        company.id = $("#company").val();
+        company.name=$("#company :selected").text();
+        category.id = $("#category").val();
+        category.name=$("#category :selected").text();
+
+        product.name = $("#name").val();
+        product.image = $("#image").val();
+        product.price = $("#price").val();
+        product.accede = $("#accede").val();
+        product.quantity = $("#quantity").val();
+        product.description = $("#description").val();
+        product.company = company;
+        product.category = category;
+
+        delete product.id;
+
+        $.ajax({
+            headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            url: "/api/products/create",
+            type: "POST",
+            data: JSON.stringify(product)
+
+        }).done(function (resp) {
+
+            let str = '';
+
+            str = `
+                    <tr id="tr_${resp.id}">
+                            <th scope="row">${resp.id}</th>
+                            <td>${resp.name}</td>
+                            <td>${resp.image}</td>
+                            <td>${resp.price}</td>
+                            <td>${resp.accede}</td>
+                            <td>${resp.quantity}</td>
+                            <td>${resp.description}</td>
+                            <td>${resp.createdAt}</td>
+                            <td>${resp.category.name}</td>
+                            <td>${resp.company.name}</td>
+                            <td>
+                                <button type="button" data-toggle="modal" data-target="#updateModal" class="btn btn-outline-primary edit"
+                                    data-id="${resp.id}"
+                                >
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    Edit
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-danger delete" data-id="${resp.id}">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    Delete
+                                </button>
+                            </td>
+
+                        </tr>
+                `;
+
+            $("#tbListProduct").prepend(str);
+
+
+            handleEdit();
+
+            handleDelete();
+
+        }).fail(function () {
+            alert("ERROR")
+        });
+    }
+
+    function updateProduct() {
+        product.id = $("#idUp").val();
+        product.name = $("#nameUp").val();
+        product.price = $("#priceUp").val();
+        product.accede = $("#accedeUp").val();
+        product.image = $("#imageUp").val();
+        product.quantity = $("#quantityUp").val();
+        product.description = $("#descriptionUp").val();
+        product.category = $("#categoryUp").val();
+        product.category = $("#categoryUp :selected").text();
+        product.company = $("#companyUp").val();
+        product.company = $("#companyUp :selected").text();
+
+        $.ajax({
+            headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            url: "/api/products/update",
+            type: "POST",
+            data: JSON.stringify(product)
+        }).done(function (resp) {
+            if(resp != null){
+                alert("ok")
+            }
+            //
+            // let str = '';
+            //
+            // str = `
+            //         <tr id="tr_${resp.id}">
+            //             <th scope="row">${resp.id}</th>
+            //             <td>${resp.name}</td>
+            //             <td>${resp.image}</td>
+            //             <td>${resp.price}</td>
+            //             <td>${resp.accede}</td>
+            //             <td>${resp.quantity}</td>
+            //             <td>${resp.description}</td>
+            //             <td>${resp.createdAt}</td>
+            //             <td>${resp.category.name}</td>
+            //             <td>${resp.company.name}</td>
+            //             <td>
+            //                 <button type="button" data-toggle="modal" data-target="#updateModal" class="btn btn-outline-primary edit"
+            //                     data-id="${resp.id}"
+            //                 >
+            //                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+            //                     Edit
+            //                 </button>
+            //             </td>
+            //             <td>
+            //                 <button type="button" class="btn btn-outline-danger delete" data-id="${resp.id}">
+            //                     <i class="fa fa-trash-o" aria-hidden="true"></i>
+            //                     Delete
+            //                 </button>
+            //             </td>
+            //         </tr>
+            //     `;
+            //     console.log("đã vào");
+            // $("#tr_"+ product.id).replaceWith(str);
+            // $("#updateModal").modal('hide');
+            //
+            // handleEdit();
+            //
+            // handleDelete();
+
+        }).fail(function () {
+            alert("ERROR")
+        });
+    }
+
+    function getListProduct() {
+        $.ajax({
+            url: "/api/products",
+            type: "GET"
+        }).done(function (resp) {
+
+            let str = '';
+
+            $.each(resp, function(index, item) {
+
+                product = item;
+
+                console.log(product);
+                str = `
+                        <tr id="tr_${product.id}">
+                            <th scope="row">${product.id}</th>
+                            <td>${product.name}</td>
+                            <td>${product.image}</td>
+                            <td>${product.price}</td>
+                            <td>${product.accede}</td>
+                            <td>${product.quantity}</td>
+                            <td>${product.description}</td>
+                            <td>${product.createdAt}</td>
+                            <td>${product.category.name}</td>
+                            <td>${product.company.name}</td>
+                            <td>
+                                <button type="button" data-toggle="modal" data-target="#updateModal" class="btn btn-outline-primary edit"
+                                    data-id="${product.id}"
+                                >
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    Edit
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-danger delete" data-id="${product.id}">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    Delete
+                                </button>
+                            </td>
+
+                        </tr>
+                    `;
+                $("#tbListProduct").prepend(str);
+            });
+
+            $("#updateModal").modal('hide');
+
+            handleEdit();
+
+            handleDelete();
+
+        }).fail(function () {
+            alert("ERROR")
+        });
+    }
+
+    function getAllCategory() {
+        return $.ajax({
+            url: api_category,
+            type: "GET"
+        }).done(function (resp) {
+
+            let str = '';
+
+            $.each(resp, function(index, item) {
+                str = `
+                        <option value="${item.category_id}">${item.category_name}</option>
+                    `;
+                $("#category").append(str);
+                $("#categoryUp").append(str);
+            })
+        }).fail(function () {
+            alert("ERROR")
+        });
+    }
+
+    function getAllCompany() {
+        return $.ajax({
+            url: api_company,
+            type: "GET"
+        }).done(function (resp) {
+
+            let str = '';
+
+            $.each(resp, function(index, item) {
+                str = `
+                        <option value="${item.company_id}">${item.company_name}</option>
+                    `;
+                $("#company").append(str);
+                $("#companyUp").append(str);
+            })
+        }).fail(function () {
+            alert("ERROR")
+        });
+    }
+
+    $(document).ready(function () {
+        getListProduct();
+        getAllCategory();
+        getAllCompany();
+
+    });
+
+</script>
+
+</body>
+</html>
