@@ -4,6 +4,8 @@ import com.codegym.model.Category;
 import com.codegym.model.Company;
 import com.codegym.model.Product;
 
+import com.codegym.model.dto.CategoryDTO;
+import com.codegym.model.dto.CompanyDTO;
 import com.codegym.model.dto.ProductDTO;
 import com.codegym.service.category.CategoryService;
 import com.codegym.service.company.CompanyService;
@@ -61,11 +63,19 @@ public class ProductApi {
     }
 
     @PostMapping("/update")
-    public Product update(@RequestBody Product product) {
+    public ResponseEntity<?> update(@RequestBody Product product) {
 
-        Product product1 = productService.save(product);
+        Category category = categoryService.save(product.getCategory());
 
-        return product1;
+        product.setCategory(category);
+
+        Product productUpdated = productService.save(product);
+
+        if (productUpdated != null) {
+            return new ResponseEntity<>(productUpdated.toProductDTO(), HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
     @GetMapping("/delete/{id}")

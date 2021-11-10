@@ -2,6 +2,7 @@ package com.codegym.model;
 
 import com.codegym.model.dto.CategoryDTO;
 import com.codegym.model.dto.CompanyDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,10 +27,10 @@ public class Company {
 
     private String name;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(targetEntity = Product.class, mappedBy = "company", fetch = FetchType.EAGER)
     private Set<Product> products;
 
-    public CompanyDTO companyDTO() {
+    public CompanyDTO toCompanyDTO() {
         return new CompanyDTO()
                 .setId(id)
                 .setName(name)

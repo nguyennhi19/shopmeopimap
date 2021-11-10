@@ -1,5 +1,7 @@
 package com.codegym.model;
 
+import com.codegym.model.dto.ProductDTO;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,7 +33,7 @@ public class Product {
 
     @CreationTimestamp
     @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss a")
-    private Date createdAt = new Date();
+    private Date createdAt;
 
     private String image;
     private BigDecimal price;
@@ -39,12 +41,27 @@ public class Product {
     private int quantity;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id", unique = true, nullable = false)
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference("category-product")
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "company_id", referencedColumnName = "id", unique = true, nullable = false)
+    @JoinColumn(name = "company_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference("company-product")
     private Company company;
+
+    public ProductDTO toProductDTO() {
+        return new ProductDTO()
+                .setId(id)
+                .setName(name)
+                .setAccede(accede)
+                .setImage(image)
+                .setPrice(price)
+                .setQuantity(quantity)
+                .setDescription(description)
+                .setCategory(category.toCategoryDTO())
+                .setCompany(company.toCompanyDTO());
+    }
 
 //    @OneToMany(mappedBy = "order_item")
 //    private Set<OrderItem> orderItems;

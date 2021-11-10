@@ -1,6 +1,7 @@
 package com.codegym.model;
 
 import com.codegym.model.dto.CategoryDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class Category {
 
     private String name;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(targetEntity = Product.class, mappedBy = "category", fetch = FetchType.EAGER)
     private Set<Product> products;
 
     public CategoryDTO toCategoryDTO() {

@@ -16,6 +16,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 public class ProductDTO {
 
     private Long id;
@@ -43,7 +44,7 @@ public class ProductDTO {
         this.accede = accede;
         this.quantity = quantity;
         this.category = category.toCategoryDTO();
-        this.company = company.companyDTO();
+        this.company = company.toCompanyDTO();
     }
 
     public Product product() {
@@ -56,7 +57,7 @@ public class ProductDTO {
                 .setPrice(price)
                 .setAccede(accede)
                 .setQuantity(quantity)
-                .setCategory(category.category())
-                .setCompany(company.company());
+                .setCategory(category.toCategory())
+                .setCompany(company.toCompany());
     }
 }

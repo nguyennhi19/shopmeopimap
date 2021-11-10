@@ -16,8 +16,8 @@ public class CompanyDTO {
     private Long id;
     private String name;
 
-    public Company company(){
-        return company()
+    public Company toCompany(){
+        return new Company()
                 .setId(id)
                 .setName(name);
     }

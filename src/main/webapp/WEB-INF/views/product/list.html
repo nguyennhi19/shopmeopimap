@@ -329,10 +329,21 @@
         product.image = $("#imageUp").val();
         product.quantity = $("#quantityUp").val();
         product.description = $("#descriptionUp").val();
-        product.category = $("#categoryUp").val();
-        product.category = $("#categoryUp :selected").text();
-        product.company = $("#companyUp").val();
-        product.company = $("#companyUp :selected").text();
+
+        product.category = {
+            id: $("#categoryUp").val(),
+            name: $("#categoryUp :selected").text()
+        };
+
+        product.company = {
+            id: $("#companyUp").val(),
+            name: $("#companyUp :selected").text()
+        } ;
+
+        // product.category = $("#categoryUp").val();
+        // product.category = $("#categoryUp :selected").text();
+        // product.company = $("#companyUp").val();
+        // product.company = $("#companyUp :selected").text();
 
         $.ajax({
             headers: {
@@ -346,44 +357,44 @@
             if(resp != null){
                 alert("ok")
             }
-            //
-            // let str = '';
-            //
-            // str = `
-            //         <tr id="tr_${resp.id}">
-            //             <th scope="row">${resp.id}</th>
-            //             <td>${resp.name}</td>
-            //             <td>${resp.image}</td>
-            //             <td>${resp.price}</td>
-            //             <td>${resp.accede}</td>
-            //             <td>${resp.quantity}</td>
-            //             <td>${resp.description}</td>
-            //             <td>${resp.createdAt}</td>
-            //             <td>${resp.category.name}</td>
-            //             <td>${resp.company.name}</td>
-            //             <td>
-            //                 <button type="button" data-toggle="modal" data-target="#updateModal" class="btn btn-outline-primary edit"
-            //                     data-id="${resp.id}"
-            //                 >
-            //                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-            //                     Edit
-            //                 </button>
-            //             </td>
-            //             <td>
-            //                 <button type="button" class="btn btn-outline-danger delete" data-id="${resp.id}">
-            //                     <i class="fa fa-trash-o" aria-hidden="true"></i>
-            //                     Delete
-            //                 </button>
-            //             </td>
-            //         </tr>
-            //     `;
-            //     console.log("đã vào");
-            // $("#tr_"+ product.id).replaceWith(str);
-            // $("#updateModal").modal('hide');
-            //
-            // handleEdit();
-            //
-            // handleDelete();
+
+            let str = '';
+
+            str = `
+                    <tr id="tr_${resp.id}">
+                        <th scope="row">${resp.id}</th>
+                        <td>${resp.name}</td>
+                        <td>${resp.image}</td>
+                        <td>${resp.price}</td>
+                        <td>${resp.accede}</td>
+                        <td>${resp.quantity}</td>
+                        <td>${resp.description}</td>
+                        <td>${resp.createdAt}</td>
+                        <td>${resp.category.name}</td>
+                        <td>${resp.company.name}</td>
+                        <td>
+                            <button type="button" data-toggle="modal" data-target="#updateModal" class="btn btn-outline-primary edit"
+                                data-id="${resp.id}"
+                            >
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                Edit
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger delete" data-id="${resp.id}">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                console.log("đã vào");
+            $("#tr_"+ product.id).replaceWith(str);
+            $("#updateModal").modal('hide');
+
+            handleEdit();
+
+            handleDelete();
 
         }).fail(function () {
             alert("ERROR")

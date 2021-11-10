@@ -17,8 +17,8 @@ public class CategoryDTO {
     private Long id;
     private String name;
 
-    public Category category(){
-        return category()
+    public Category toCategory(){
+        return new Category()
                 .setId(id)
                 .setName(name);
     }
