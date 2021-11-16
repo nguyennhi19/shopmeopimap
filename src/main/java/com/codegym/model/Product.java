@@ -10,9 +10,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Set;
+
 
 @Getter
 @Setter
@@ -31,7 +30,7 @@ public class Product {
 
     @CreationTimestamp
     @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss a")
-    private Date createdAt = new Date();
+    private Date createdAt;
 
     private String image;
     private BigDecimal price;

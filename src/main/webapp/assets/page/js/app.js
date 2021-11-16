@@ -1,6 +1,6 @@
 class User {
 
-    constructor(id,  name,  userName,  password,  role,  phone,  address,  email,  image,  createdAt,  isDelete,  salary,  revenue,  business) {
+    constructor(id,  name,  userName,  password,  role,  phone,  address,  email,  image,  createdAt,  isDelete,  salary) {
         this.id = id;
         this.name = name;
         this.userName = userName;
@@ -11,10 +11,15 @@ class User {
         this.email = email;
         this.image = image;
         this.createdAt = createdAt;
-        this.isDelete = isDelete;
+        this.delete = isDelete;
         this.salary = salary;
-        this.revenue = revenue;
-        this.business = business;
+    }
+}
+
+class RoleUser {
+    constructor(id, name) {
+        this.id = id;
+        this.name = name;
     }
 }
 

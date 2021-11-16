@@ -53,7 +53,8 @@
                     <div class="form-group row">
                         <div class="col-4">
                             <label for="role">IsAdmin</label>
-                            <input type="text" class="form-control" id="role">
+                            <select id="role" class="select form-control">
+                            </select>
                         </div>
                         <div class="col-8">
                             <label for="salary">salary</label>
@@ -74,8 +75,6 @@
                 <th scope="col">Name</th>
                 <th scope="col">UserName</th>
                 <th scope="col">phone</th>
-                <th scope="col">email</th>
-                <th scope="col">image</th>
                 <th scope="col">createAt</th>
                 <th scope="col">status</th>
                 <th scope="col">salary</th>
@@ -141,7 +140,8 @@
                             <div class="form-group row">
                                 <div class="col-3">
                                     <label for="roleE">IsAdmin</label>
-                                    <input type="text" class="form-control" id="roleE">
+                                    <select id="roleE" class="select form-control">
+                                    </select>
                                 </div>
                                 <div class="col-6">
                                     <label for="salaryE">salary</label>
@@ -169,6 +169,7 @@
 <script>
 
     let user = new User();
+    let role = new Role();
 
     $("#btnCreate").on("click", function () {
         createUser();
@@ -271,8 +272,8 @@
         user.email = $("#email").val();
         user.image = $("#image").val();
         user.salary = $("#salary").val();
-        user.phone = $("#phone").val();
-        user.balance = $("#balance").val();
+        user.password = $("#password").val();
+        user.address = $("#address").val();
 
         $.ajax({
             headers: {
@@ -291,29 +292,34 @@
 
             str = `
                     <tr id="tr_${resp.id}">
-                        <th scope="row">${resp.id}</th>
-                        <td>${resp.fullName}</td>
-                        <td>${resp.email}</td>
-                        <td>${resp.balance}</td>
-                        <td>${resp.locationRegion.provinceName}</td>
-                        <td>${resp.locationRegion.districtName}</td>
-                        <td>${resp.locationRegion.wardName}</td>
-                        <td>${resp.phone}</td>
-                        <td>
-                            <button type="button" data-toggle="modal" data-target="#updateModal" class="btn btn-outline-primary edit"
-                                data-id="${resp.id}"
-                            >
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                Edit
-                            </button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-danger delete" data-id="${resp.id}">
-                                <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
+                            <th scope="row">${resp.id}</th>
+                            <td>${resp.name}</td>
+                            <td>${resp.userName}</td>
+                            <td>${resp.phone}</td>
+                            <td>${moment(resp.createdAt).format("YYYY-MM-DD")}</td>
+                             <td><span class="badge ${resp.delete ? 'bg-success' : 'bg-warning'}">${resp.delete ? 'active' : 'inactive'}</span></td>
+                            <td>${resp.salary}</td>
+                            <td>${resp.role}</td>
+                            <td>
+                                <button type="button" data-toggle="modal" data-target="#updateModal" class="btn btn-outline-primary edit"
+                                    data-id="${resp.id}"
+                                >
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    Edit
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-danger delete" data-id="${resp.id}">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    Delete
+                                </button>
+                            </td>
+                            <td type="button" class='btn ${resp.delete ? 'btn-warning' : 'btn-secondary'} btn-sm'
+                            title='${resp.delete ? 'inactive' : 'active'} employee' >
+                                <i class='fa ${item.delete ? 'fa-lock' : 'fa-unlock'}'></i>
+                            </td>
+
+                        </tr>
                 `;
 
             $("#tbListUser").prepend(str);
@@ -357,7 +363,6 @@
                     <tr id="tr_${resp.id}">
                         <th scope="row">${resp.id}</th>
                         <td>${resp.fullName}</td>
-                        <td>${resp.email}</td>
                         <td>${resp.balance}</td>
                         <td>${resp.provinceName}</td>
                         <td>${resp.districtName}</td>
@@ -408,9 +413,7 @@
                             <td>${item.name}</td>
                             <td>${item.userName}</td>
                             <td>${item.phone}</td>
-                            <td>${item.email}</td>
-                            <td>${item.image}</td>
-                            <td>${item.createdAt}</td>
+                            <td>${moment(item.createdAt).format("YYYY-MM-DD")}</td>
                              <td><span class="badge ${item.delete ? 'bg-success' : 'bg-warning'}">${item.delete ? 'active' : 'inactive'}</span></td>
                             <td>${item.salary}</td>
                             <td>${item.role}</td>
@@ -448,11 +451,32 @@
         });
     }
 
+    function getListRole(){
+        $.ajax({
+            url:"/api/role",
+            type: "GET"
+        }).done(function (resp) {
+            let str = ""
+
+            $.each(resp, function(index, item) {
+                str = `
+                        <option value="${item.id}">${item.name}</option>
+                    `;
+                $("#role").append(str);
+                $("#roleE").append(str);
+            })
+        }).fail(function () {
+            alert("ERROR")
+        });
+    }
+
     $(document).ready(function () {
         getListUser();
+        getListRole();
     });
 
 </script>
+<script src="/assets/libs/moment/moment.min.js"></script>
 
 </body>
 </html>

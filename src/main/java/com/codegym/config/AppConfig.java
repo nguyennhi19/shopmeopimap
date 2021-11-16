@@ -6,6 +6,8 @@ import com.codegym.service.company.CompanyService;
 import com.codegym.service.company.CompanyServiceImpl;
 import com.codegym.service.product.ProductService;
 import com.codegym.service.product.ProductServiceImpl;
+import com.codegym.service.role.RoleService;
+import com.codegym.service.role.RoleServiceImpl;
 import com.codegym.service.user.UserService;
 import com.codegym.service.user.UserServiceImpl;
 import org.springframework.beans.BeansException;
@@ -15,6 +17,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -117,7 +120,7 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     public Properties additionalProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
         return properties;
     }
 
@@ -137,18 +140,6 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     public CategoryService categoryService() {
         return new CategoryServiceImpl();
     }
-
-    @Bean
-    public UserService userService() {
-        return new UserServiceImpl();
-    }
-
-//    @Bean
-//    public C productService() {
-//        return new ProductServiceImpl();
-//    }
-
-
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

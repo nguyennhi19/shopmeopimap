@@ -66,8 +66,6 @@
                 <th scope="col">price</th>
                 <th scope="col">accede</th>
                 <th scope="col">quantity</th>
-                <th scope="col">description</th>
-                <th scope="col">createdAt</th>
                 <th scope="col">category</th>
                 <th scope="col">company</th>
                 <th colspan="2" scope="col">Action</th>
@@ -240,8 +238,13 @@
                 $("#quantityUp").val(resp.quantity);
                 $("#descriptionUp").val(resp.description);
                 $("#createAtUp").val(resp.createdAt);
+
                 $("#categoryUp").val(resp.category.id);
+                console.log(resp.category.id)
+
                 $("#companyUp").val(resp.company.id);
+                console.log(resp.company.id)
+
 
             }).fail(function () {
                 alert("ERROR")
@@ -287,8 +290,6 @@
                             <td>${resp.price}</td>
                             <td>${resp.accede}</td>
                             <td>${resp.quantity}</td>
-                            <td>${resp.description}</td>
-                            <td>${resp.createdAt}</td>
                             <td>${resp.category.name}</td>
                             <td>${resp.company.name}</td>
                             <td>
@@ -322,6 +323,7 @@
     }
 
     function updateProduct() {
+
         product.id = $("#idUp").val();
         product.name = $("#nameUp").val();
         product.price = $("#priceUp").val();
@@ -334,6 +336,7 @@
         product.company = $("#companyUp").val();
         product.company = $("#companyUp :selected").text();
 
+
         $.ajax({
             headers: {
                 'Accept':'application/json',
@@ -343,47 +346,42 @@
             type: "POST",
             data: JSON.stringify(product)
         }).done(function (resp) {
-            if(resp != null){
-                alert("ok")
-            }
-            //
-            // let str = '';
-            //
-            // str = `
-            //         <tr id="tr_${resp.id}">
-            //             <th scope="row">${resp.id}</th>
-            //             <td>${resp.name}</td>
-            //             <td>${resp.image}</td>
-            //             <td>${resp.price}</td>
-            //             <td>${resp.accede}</td>
-            //             <td>${resp.quantity}</td>
-            //             <td>${resp.description}</td>
-            //             <td>${resp.createdAt}</td>
-            //             <td>${resp.category.name}</td>
-            //             <td>${resp.company.name}</td>
-            //             <td>
-            //                 <button type="button" data-toggle="modal" data-target="#updateModal" class="btn btn-outline-primary edit"
-            //                     data-id="${resp.id}"
-            //                 >
-            //                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-            //                     Edit
-            //                 </button>
-            //             </td>
-            //             <td>
-            //                 <button type="button" class="btn btn-outline-danger delete" data-id="${resp.id}">
-            //                     <i class="fa fa-trash-o" aria-hidden="true"></i>
-            //                     Delete
-            //                 </button>
-            //             </td>
-            //         </tr>
-            //     `;
-            //     console.log("đã vào");
-            // $("#tr_"+ product.id).replaceWith(str);
-            // $("#updateModal").modal('hide');
-            //
-            // handleEdit();
-            //
-            // handleDelete();
+
+            let str = '';
+
+            str = `
+                    <tr id="tr_${resp.id}">
+                        <th scope="row">${resp.id}</th>
+                        <td>${resp.name}</td>
+                        <td>${resp.image}</td>
+                        <td>${resp.price}</td>
+                        <td>${resp.accede}</td>
+                        <td>${resp.quantity}</td>
+                        <td>${resp.category.name}</td>
+                        <td>${resp.company.name}</td>
+                        <td>
+                            <button type="button" data-toggle="modal" data-target="#updateModal" class="btn btn-outline-primary edit"
+                                data-id="${resp.id}"
+                            >
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                Edit
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger delete" data-id="${resp.id}">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                console.log("đã vào");
+            $("#tr_"+ product.id).replaceWith(str);
+            $("#updateModal").modal('hide');
+
+            handleEdit();
+
+            handleDelete();
 
         }).fail(function () {
             alert("ERROR")
@@ -411,8 +409,6 @@
                             <td>${product.price}</td>
                             <td>${product.accede}</td>
                             <td>${product.quantity}</td>
-                            <td>${product.description}</td>
-                            <td>${product.createdAt}</td>
                             <td>${product.category.name}</td>
                             <td>${product.company.name}</td>
                             <td>
@@ -486,6 +482,11 @@
         });
     }
 
+    function getDay(date){
+        let day = date.format("YYYY-MM-DD");
+        return day;
+    }
+
     $(document).ready(function () {
         getListProduct();
         getAllCategory();
@@ -494,6 +495,8 @@
     });
 
 </script>
+<script src="/assets/libs/moment/moment.min.js"></script>
+
 
 </body>
 </html>
